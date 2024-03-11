@@ -25,6 +25,7 @@ def check_vertex(x,y):
         if (mapArray[x][y] == '.'):
             if(mapArray[x+1][y] == '.'):
                 vertexStack.append((x+1,y))
+                print(x+1,y)
                 if(edgeDict[(x,y)].count((x+1,y) == 0)):
                     edgeDict[(x,y)].append(((x+1,y)))
                     edgeDict[(x+1,y)].append(((x,y)))
@@ -32,6 +33,7 @@ def check_vertex(x,y):
 
             if(mapArray[x-1][y] == '.'):
                 vertexStack.append((x-1,y))
+                print(x-1,y)
                 if(edgeDict[(x,y)].count((x-1,y) == 0)):
                     edgeDict[(x,y)].append(((x-1,y)))
                     edgeDict[(x-1,y)].append(((x,y)))
@@ -39,6 +41,7 @@ def check_vertex(x,y):
 
             if(mapArray[x][y+1] == '.'):
                 vertexStack.append((x,y+1))
+                print(x,y+1)
                 if(edgeDict[(x,y)].count((x,y+1) == 0)):
                     edgeDict[(x,y)].append(((x,y+1)))
                     edgeDict[(x,y+1)].append(((x,y)))
@@ -46,6 +49,7 @@ def check_vertex(x,y):
 
             if(mapArray[x][y-1] == '.'):
                 vertexStack.append((x,y-1))
+                print(x,y-1)
                 if(edgeDict[(x,y)].count((x,y-1) == 0)):
                     edgeDict[(x,y)].append(((x,y-1)))
                     edgeDict[(x,y-1)].append(((x,y)))
