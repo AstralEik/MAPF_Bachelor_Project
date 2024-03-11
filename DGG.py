@@ -17,6 +17,7 @@ for x in range(height):
     for y in range(width):
         edgeDict[(x,y)] = []
 
+edgeDict[(1,1)].append((0,0))
 print(edgeDict[(1,1)])
 
 def check_vertex(x,y):
