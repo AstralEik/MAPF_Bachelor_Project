@@ -4,9 +4,7 @@ width = int(input().split(" ")[1])
 map = input()
 mapArray = []
 vertexArray = []
-edgeDict = {
-    (0,0) : []
-}
+edgeDict = {}
 
 for i in range(height):
     line = list(input())
@@ -14,6 +12,11 @@ for i in range(height):
 
 vertexStack = []
 vertexStack.append((1,1))
+
+for x in range(height):
+    for y in range(width):
+        edgeDict[(x,y)] = []
+
 def check_vertex(x,y):
     if(x != 0 and y!= width-1 and x != height and y != 0):
         if (mapArray[x][y] == '.'):
