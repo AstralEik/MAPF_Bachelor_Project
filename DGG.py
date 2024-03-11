@@ -63,7 +63,9 @@ def check_vertex(x,y):
 
 def create_dir_graph():
     while len(vertexStack) != 0:
-        x,y = vertexStack.pop()    
+        x,y = vertexStack.pop()
+        print("new vertex")
+        print(x,y)    
         check_vertex(x,y)
 
 create_dir_graph()
