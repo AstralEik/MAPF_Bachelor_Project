@@ -53,11 +53,11 @@ def check_vertex(x,y):
                 if(edgeDict[(x,y)].count((x,y-1) == 0)):
                     edgeDict[(x,y)].append(((x,y-1)))
                     edgeDict[(x,y-1)].append(((x,y)))
-    else:
-        vertexStack.append((x+1,y))
-        vertexStack.append((x-1,y))
-        vertexStack.append((x,y+1))
-        vertexStack.append((x,y-1))
+    #else:
+        #vertexStack.append((x+1,y))
+        #vertexStack.append((x-1,y))
+        #vertexStack.append((x,y+1))
+        #vertexStack.append((x,y-1))
 
 
 
