@@ -17,6 +17,8 @@ for x in range(height):
     for y in range(width):
         edgeDict[(x,y)] = []
 
+print(edgeDict)
+
 def check_vertex(x,y):
     if(x != 0 and y!= width-1 and x != height and y != 0):
         if (mapArray[x][y] == '.'):
