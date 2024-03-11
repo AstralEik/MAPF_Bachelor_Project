@@ -100,7 +100,6 @@ def check_vertex(x,y):
                     create_edge_left(x,y)
 
     elif(x != 0 and y!= width-1 and x != height-1 and y != 0):
-        print(x,y)
         check_set_right(x,y)
         check_set_left(x,y)
         check_set_down(x,y)
@@ -156,8 +155,6 @@ def check_set_left(x,y):
 def create_dir_graph():
     while len(vertexStack) != 0:
         x,y = vertexStack.pop()
-        print("new vertex")
-        print(x,y)    
         check_vertex(x,y)
 
 create_dir_graph()
