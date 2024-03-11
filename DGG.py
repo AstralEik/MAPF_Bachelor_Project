@@ -21,6 +21,7 @@ print(edgeDict)
 
 def check_vertex(x,y):
     if(x != 0 and y!= width-1 and x != height and y != 0):
+        print(x,y)
         if (mapArray[x][y] == '.'):
             if(mapArray[x+1][y] == '.'):
                 vertexStack.append((x+1,y))
