@@ -152,10 +152,10 @@ def check_set_left(x,y):
         hasSeen.add((x,y-1))
 
 
-def create_dir_graph():
+def create_udir_graph():
     while len(vertexStack) != 0:
         x,y = vertexStack.pop()
         check_vertex(x,y)
 
-create_dir_graph()
+create_udir_graph()
 print(edgeDict)
