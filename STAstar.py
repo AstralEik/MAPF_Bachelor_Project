@@ -25,6 +25,6 @@ def findPathTo(x1,y1,x2,y2):
         expandVertex(currentVertex)
 print(UDG)
 
-findPathTo(agent[0],agent[1])
+findPathTo(agent[0][0],agent[0][1],agent[1][0],agent[1][1])
 
 print(hasSeenSet)
