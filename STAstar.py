@@ -12,7 +12,8 @@ frontierQueue = []
 hasSeenSet = set()
 lowestPathCost = float(20000.00000) 
 
-
+def snd(x:tuple):
+    return x[1]
 def calculateSomeFuckingTriangles(x1,y1):
     
     d1 = sqrt(pow(targetVertex[0]-x1,2))
@@ -36,7 +37,7 @@ def expandVertex(x,y):
             lowestPathCost = dis
             print(dis)
             frontierQueue.append((vertex,dis))
-            frontierQueue.sort(key=[1], reverse=True)
+            frontierQueue.sort(key=snd, reverse=True)
             
 
 def findPathTo(x1,y1,x2,y2):
