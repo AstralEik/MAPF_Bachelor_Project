@@ -160,5 +160,4 @@ def createGraph():
             check_vertex(x,y)
 
     create_udir_graph()
-    print(edgeDict)
     return edgeDict
