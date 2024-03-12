@@ -10,9 +10,9 @@ hasSeenSet = set()
 def expandVertex(x,y):
     hasSeenSet.add((x,y))
     neighbours = UDG.get((x,y))
-    for vertex in range (neighbours):
+    for vertex in neighbours:
         if vertex not in hasSeenSet:
-            vertexStack.append((vertex[0],vertex[1]))
+            vertexStack.append(vertex)
             
 
 def findPathTo(x1,y1,x2,y2):
