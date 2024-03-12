@@ -20,7 +20,7 @@ def findPathTo(x1,y1,x2,y2):
     while len(vertexStack) != 0:
         currentVertex = vertexStack.pop()
         if(currentVertex == (x2,y2)):
-            hasSeenSet.add(x2,y2)
+            hasSeenSet.add((x2,y2))
             break
         expandVertex(currentVertex[0],currentVertex[1])
 print(UDG)
