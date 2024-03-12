@@ -34,6 +34,7 @@ def expandVertex(x,y):
         dis = calculateSomeFuckingTriangles(vertex[0],vertex[1]) 
         if vertex not in hasSeenSet or dis < lowestPathCost:
             lowestPathCost = dis
+            print(dis)
             frontierQueue.append(vertex)
             
 
