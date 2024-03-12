@@ -3,7 +3,7 @@ from UDGG import *
 
 UDG = createGraph()
 
-agent = ((0,1),(2,1))
+agent = ((0,0),(9,24))
 
 startVertex = (agent[0][0],agent[0][1])
 targetVertex = (agent[1][0], agent[1][1])
@@ -23,7 +23,6 @@ def calculateSomeFuckingTriangles(x1,y1):
     if(d2 < 0):
         d2 = d2*-1
     distance = d1 + d2
-    
     
     return distance
 
