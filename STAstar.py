@@ -36,6 +36,7 @@ def expandVertex(x,y):
             lowestPathCost = dis
             print(dis)
             frontierQueue.append((vertex,dis))
+            frontierQueue.sort(key=[1], reverse=True)
             
 
 def findPathTo(x1,y1,x2,y2):
