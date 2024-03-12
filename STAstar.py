@@ -3,7 +3,7 @@ from UDGG import *
 
 UDG = createGraph()
 
-agent = ((0,0),(9,24))
+agent = ((0,1),(2,2))
 
 startVertex = (agent[0][0],agent[0][1])
 targetVertex = (agent[1][0], agent[1][1])
