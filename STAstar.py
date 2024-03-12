@@ -1,24 +1,48 @@
+from math import sqrt
 from UDGG import *
 
 UDG = createGraph()
 
 agent = ((0,1),(2,1))
 
-vertexStack = []
+startVertex = (agent[0],agent[1])
+targetVertex = (agent[2], agent[3])
+
+frontierQueue = []
 hasSeenSet = set()
+lowestPathCost = 2000000000 
+
+def calculateSomeFuckingTriangles(x1,y1):
+    
+    d1 = sqrt(pow(targetVertex[0]-x1,2))
+    d2 = sqrt(pow(targetVertex[1]-y1,2))
+    if(d1 < 0):
+        d1 = d1*-1
+    if(d2 < 0):
+        d2 = d2*-1
+    distance = d1 + d2
+    
+    
+    return distance
 
 def expandVertex(x,y):
     hasSeenSet.add((x,y))
     neighbours = UDG.get((x,y))
     for vertex in neighbours:
-        if vertex not in hasSeenSet:
-            vertexStack.append(vertex)
+        dis = calculateSomeFuckingTriangles(vertex[0],vertex[1]) 
+        if vertex not in hasSeenSet or dis < lowestPathCost:
+            lowestPathCost = dis
+            frontierQueue.append(vertex)
             
 
 def findPathTo(x1,y1,x2,y2):
-    vertexStack.append((x1,y1))
-    while len(vertexStack) != 0:
-        currentVertex = vertexStack.pop()
+    
+    #start of program
+    frontierQueue.append((x1,y1))
+    
+    
+    while len(frontierQueue) != 0:
+        currentVertex = frontierQueue.pop()
         if(currentVertex == (x2,y2)):
             hasSeenSet.add((x2,y2))
             break
