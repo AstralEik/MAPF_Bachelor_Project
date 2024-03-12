@@ -5,8 +5,8 @@ UDG = createGraph()
 
 agent = ((0,1),(2,1))
 
-startVertex = (agent[0],agent[1])
-targetVertex = (agent[2], agent[3])
+startVertex = (agent[0][0],agent[0][1])
+targetVertex = (agent[1][0], agent[1][1])
 
 frontierQueue = []
 hasSeenSet = set()
