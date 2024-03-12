@@ -3,7 +3,9 @@ from UDGG import *
 
 UDG = createGraph()
 
-agent = ((0,0),(15,15))
+vars = input().split(" ")
+
+agent = ((int(vars[0]),int(vars[1])),(int(vars[2]),int(vars[3])))
 
 startVertex = (agent[0][0],agent[0][1])
 targetVertex = (agent[1][0], agent[1][1])
@@ -39,12 +41,9 @@ def expandVertex(x,y,costToReach):
             
 
 def findPathTo(x1,y1,x2,y2):
-    
     #start of program
     distanceToGoal = calculateSomeFuckingTriangles(x1,y1)
     frontierQueue.append(((x1,y1), distanceToGoal,0))
-    
-    
     while len(frontierQueue) != 0:
         currentVertex = frontierQueue.pop()
         if((currentVertex[0][0],currentVertex[0][1]) == (x2,y2)):
