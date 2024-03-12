@@ -47,7 +47,7 @@ def findPathTo(x1,y1,x2,y2):
     
     while len(frontierQueue) != 0:
         currentVertex = frontierQueue.pop()
-        if(currentVertex == (x2,y2)):
+        if((currentVertex[0][0],currentVertex[0][1]) == (x2,y2)):
             hasSeenSet.add((x2,y2))
             break
         expandVertex(currentVertex[0][0],currentVertex[0][1])
