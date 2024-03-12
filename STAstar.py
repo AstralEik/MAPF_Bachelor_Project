@@ -10,7 +10,8 @@ targetVertex = (agent[1][0], agent[1][1])
 
 frontierQueue = []
 hasSeenSet = set()
-lowestPathCost = 2000000000 
+lowestPathCost = float(20000.00000) 
+
 
 def calculateSomeFuckingTriangles(x1,y1):
     
@@ -26,6 +27,7 @@ def calculateSomeFuckingTriangles(x1,y1):
     return distance
 
 def expandVertex(x,y):
+    global lowestPathCost
     hasSeenSet.add((x,y))
     neighbours = UDG.get((x,y))
     for vertex in neighbours:
