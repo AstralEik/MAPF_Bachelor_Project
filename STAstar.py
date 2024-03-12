@@ -32,7 +32,7 @@ def expandVertex(x,y):
     neighbours = UDG.get((x,y))
     for vertex in neighbours:
         dis = calculateSomeFuckingTriangles(vertex[0],vertex[1]) 
-        if vertex not in hasSeenSet or dis < lowestPathCost:
+        if vertex not in hasSeenSet and dis < lowestPathCost:
             lowestPathCost = dis
             print(dis)
             frontierQueue.append(vertex)
