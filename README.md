@@ -14,4 +14,4 @@ EECBS: A Bounded-Suboptimal Search for Multi-Agent Path Finding, By Jiaoyang Li 
 MAPF-LNS2: Fast Repairing for Multi-Agent Path Finding via Large Neighborhood Search, By Jiaoyang Li et al., found here: https://ojs.aaai.org/index.php/AAAI/article/view/21266
 
 
-
+Contact: eikb@itu.dk
