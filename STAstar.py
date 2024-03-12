@@ -42,7 +42,7 @@ def findPathTo(x1,y1,x2,y2):
     
     #start of program
     distanceToGoal = calculateSomeFuckingTriangles(x1,y1)
-    frontierQueue.append((x1,y1), distanceToGoal)
+    frontierQueue.append(((x1,y1), distanceToGoal))
     
     
     while len(frontierQueue) != 0:
