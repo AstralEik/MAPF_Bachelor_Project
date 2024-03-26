@@ -1,4 +1,6 @@
-
+from collections import defaultdict
+from classdefs import Vertex
+import sys
 def createGraph():
     maptype = input()
     height = int(input().split(" ")[1])
@@ -7,157 +9,65 @@ def createGraph():
     mapArray = []
     vertexArray = []
     edgeDict = {}
-    hasSeen = set()
+    hasBuilt = set()
+    
+    sys.setrecursionlimit(2000000)
+
+    graph = dict()
 
     for i in range(height):
         line = list(input())
         mapArray.append(line)
-
-    vertexStack = []
-    vertexStack.append((1,1))
-
-    for x in range(height):
-        for y in range(width):
-            edgeDict[(x,y)] = []
-
-
-    def check_vertex(x,y):
-        if x == 0 and y == 0:
-            check_set_right(x,y)
-            check_set_down(x,y)
-            if(mapArray[x][y] == '.'):
-                if mapArray[x+1][y] == '.':
-                    create_edge_down(x,y)
-                if mapArray[x][y+1] == '.':
-                    create_edge_right(x,y)
+    
+    def buildGraph(y,x):
+        if((y,x) not in hasBuilt):
+            hasBuilt.add((y,x))
+            newVertex = Vertex()
+            newVertex.coord[0] = y
+            newVertex.coord[1] = x
+            graph[y,x] = newVertex
+        
+            if(y-1 >= 0 and y-1 < height):        
+                if (y-1,x) not in hasBuilt and mapArray[y-1][x] == '.':
+                    buildGraph(y-1,x)
+                    newVertex.neighbours.append(graph[y-1,x])
+                elif((y-1,x) in hasBuilt and mapArray[y-1][x] == '.'):
+                    newVertex.neighbours.append(graph[y-1,x])
                     
-        elif x == 0 and y == width-1:
-            check_set_left(x,y)
-            check_set_down(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x+1][y] == '.':
-                        create_edge_down(x,y)
-                    if mapArray[x][y-1] == '.':
-                        create_edge_left(x,y)
-        elif x == height-1 and y == 0:
-            check_set_up(x,y)
-            check_set_right(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x-1][y] == '.':
-                        create_edge_up(x,y)
-                    if mapArray[x][y+1] == '.':
-                        create_edge_right(x,y)
-        elif x == height-1 and y == width-1:
-            check_set_up(x,y)
-            check_set_left(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x-1][y] == '.':
-                        create_edge_up(x,y)
-                    if mapArray[x][y-1] == '.':
-                        create_edge_left(x,y)
-        elif x == 0:
-            check_set_right(x,y)
-            check_set_left(x,y)
-            check_set_down(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x][y+1] == '.':
-                        create_edge_right(x,y)
-                    if mapArray[x][y-1] == '.':
-                        create_edge_left(x,y)
-                    if mapArray[x+1][y] == '.':
-                        create_edge_down(x,y)
-        elif x == height-1:
-            check_set_right(x,y)
-            check_set_left(x,y)
-            check_set_up(x,y)        
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x][y+1] == '.':
-                        create_edge_right(x,y)
-                    if mapArray[x][y-1] == '.':
-                        create_edge_left(x,y)
-                    if mapArray[x-1][y] == '.':
-                        create_edge_up(x,y)
-                        
-        elif y == 0:
-            check_set_down(x,y)
-            check_set_right(x,y)
-            check_set_up(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x+1][y] == '.':
-                        create_edge_down(x,y)
-                    if mapArray[x-1][y] == '.':
-                        create_edge_up(x,y)
-                    if mapArray[x][y+1] == '.':
-                        create_edge_right(x,y)
-        elif y == width-1:
-            check_set_down(x,y)
-            check_set_left(x,y)
-            check_set_up(x,y)
-            if(mapArray[x][y] == '.'):
-                    if mapArray[x+1][y] == '.':
-                        create_edge_down(x,y)
-                    if mapArray[x-1][y] == '.':
-                        create_edge_up(x,y)
-                    if mapArray[x][y-1] == '.':
-                        create_edge_left(x,y)
-
-        elif(x != 0 and y!= width-1 and x != height-1 and y != 0):
-            check_set_right(x,y)
-            check_set_left(x,y)
-            check_set_down(x,y)
-            check_set_up(x,y)
-                
-            if (mapArray[x][y] == '.'):
-                if(mapArray[x+1][y] == '.'):    
-                    create_edge_down(x,y)
-                if(mapArray[x-1][y] == '.'):
-                    create_edge_up(x,y)
-                if(mapArray[x][y+1] == '.'):
-                    create_edge_right(x,y)
-                if(mapArray[x][y-1] == '.'):
-                    create_edge_left(x,y)
+                    
+                    
+                    
+            if(x-1 >= 0 and x-1 < width):
+                if (y,x-1) not in hasBuilt and mapArray[y][x-1] == '.':
+                    buildGraph(y,x-1)
+                    newVertex.neighbours.append(graph[y,x-1])
+                elif((y,x-1) in hasBuilt and mapArray[y][x-1] == '.'):
+                    newVertex.neighbours.append(graph[y,x-1])
+                    
+                    
+                    
+                    
+            if(y+1 >= 0 and y+1 < height):
+                if (y+1,x) not in hasBuilt and mapArray[y+1][x] == '.':
+                    buildGraph(y+1,x)
+                    newVertex.neighbours.append(graph[y+1,x])
+                elif((y+1,x) in hasBuilt and mapArray[y+1][x] == '.'):
+                    newVertex.neighbours.append(graph[y+1,x])
+                    
+                    
+                    
+                    
+            if(x+1 >= 0 and x+1 < width):   
+                if (y,x+1) not in hasBuilt and mapArray[y][x+1] == '.':
+                    buildGraph(y,x+1)
+                    newVertex.neighbours.append(graph[y,x+1])
+                elif((y,x+1) in hasBuilt and mapArray[y][x+1] == '.'):
+                    newVertex.neighbours.append(graph[y,x+1])
+            #print(newVertex.neighbours)
 
 
-    def create_edge_down(x,y):
-        if(edgeDict[(x,y)].count((x+1,y)) == 0):
-            edgeDict[(x,y)].append(((x+1,y)))
-            edgeDict[(x+1,y)].append(((x,y)))
-    def create_edge_up(x,y):
-        if(edgeDict[(x,y)].count((x-1,y)) == 0):
-            edgeDict[(x,y)].append(((x-1,y)))
-            edgeDict[(x-1,y)].append(((x,y)))
-    def create_edge_right(x,y):
-        if(edgeDict[(x,y)].count((x,y+1)) == 0):
-            edgeDict[(x,y)].append(((x,y+1)))
-            edgeDict[(x,y+1)].append(((x,y)))
-    def create_edge_left(x,y):
-        if(edgeDict[(x,y)].count((x,y-1)) == 0):
-            edgeDict[(x,y)].append(((x,y-1)))
-            edgeDict[(x,y-1)].append(((x,y)))
+    for i in range(height):
+        for x in range(width):
+            buildGraph(i,x)
 
-
-    def check_set_down(x,y):
-        if((x+1,y) not in hasSeen):
-            vertexStack.append((x+1,y))
-            hasSeen.add((x+1,y))
-    def check_set_up(x,y):
-        if((x-1,y) not in hasSeen):
-            vertexStack.append((x-1,y))
-            hasSeen.add((x-1,y))
-    def check_set_right(x,y):
-        if((x,y+1) not in hasSeen):
-            vertexStack.append((x,y+1))
-            hasSeen.add((x,y+1))
-    def check_set_left(x,y):
-        if((x,y-1) not in hasSeen):
-            vertexStack.append((x,y-1))
-            hasSeen.add((x,y-1))
-
-
-    def create_udir_graph():
-        while len(vertexStack) != 0:
-            x,y = vertexStack.pop()
-            check_vertex(x,y)
-
-    create_udir_graph()
-    return edgeDict
+    return graph

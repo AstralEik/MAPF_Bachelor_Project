@@ -1,14 +1,11 @@
 from math import sqrt
 from UDGG import *
-
+import heapq
 UDG = createGraph()
 
-vars = input().split(" ")
 
-agent = ((int(vars[0]),int(vars[1])),(int(vars[2]),int(vars[3])))
-
-startVertex = (agent[0][0],agent[0][1])
-targetVertex = (agent[1][0], agent[1][1])
+startVertex = (UDG[1,1])
+targetVertex = (UDG[11,8])
 
 frontierQueue = []
 hasSeenSet = set()
@@ -16,9 +13,10 @@ lowestPathCost = float(20000.00000)
 
 def snd(x:tuple):
     return x[1]
-def calculateSomeFuckingTriangles(x1,y1):
-    d1 = sqrt(pow(targetVertex[0]-x1,2))
-    d2 = sqrt(pow(targetVertex[1]-y1,2))
+
+def calculateSomeFuckingTriangles(vertex):
+    d1 = sqrt(pow(targetVertex.coord[0]-vertex.coord[0],2))
+    d2 = sqrt(pow(targetVertex.coord[1]-vertex.coord[1],2))
     if(d1 < 0):
         d1 = d1*-1
     if(d2 < 0):
@@ -26,32 +24,33 @@ def calculateSomeFuckingTriangles(x1,y1):
     distance = d1 + d2
     return distance
 
-def expandVertex(x,y,costToReach):
+def expandVertex(vertex,costToReach):
     global lowestPathCost
-    hasSeenSet.add((x,y))
-    neighbours = UDG.get((x,y))
+    global hasSeenSet
+    hasSeenSet.add(vertex)
+    neighbours = vertex.neighbours
     for vertex in neighbours:
-        distanceToGoal = calculateSomeFuckingTriangles(vertex[0],vertex[1]) 
+        distanceToGoal = calculateSomeFuckingTriangles(vertex) 
         timeCost = costToReach+1
         if vertex not in hasSeenSet or distanceToGoal+timeCost < lowestPathCost:
             lowestPathCost = distanceToGoal
-            print(distanceToGoal)
-            frontierQueue.append((vertex,distanceToGoal,timeCost))
-            frontierQueue.sort(key=snd, reverse=True)
+            heapq.heappush(frontierQueue,(distanceToGoal,timeCost,vertex))
             
 
-def findPathTo(x1,y1,x2,y2):
+def findPathTo(startVertex,targetVertex):
+    global hasSeenSet
     #start of program
-    distanceToGoal = calculateSomeFuckingTriangles(x1,y1)
-    frontierQueue.append(((x1,y1), distanceToGoal,0))
+    distanceToGoal = calculateSomeFuckingTriangles(startVertex)
+    heapq.heappush(frontierQueue,(distanceToGoal,0,startVertex))
     while len(frontierQueue) != 0:
-        currentVertex = frontierQueue.pop()
-        if((currentVertex[0][0],currentVertex[0][1]) == (x2,y2)):
-            hasSeenSet.add((x2,y2))
+        currentVertex = heapq.heappop(frontierQueue)
+        if(currentVertex[2] == targetVertex):
+            print("found path!")
+            hasSeenSet.add(targetVertex)
             break
-        expandVertex(currentVertex[0][0],currentVertex[0][1],currentVertex[2])
-print(UDG)
+        expandVertex(currentVertex[2],currentVertex[1])
+findPathTo(startVertex,targetVertex)
 
-findPathTo(agent[0][0],agent[0][1],agent[1][0],agent[1][1])
-
-print(hasSeenSet)
+#for i in hasSeenSet:
+#    print(i.coord)
+#print(hasSeenSet)
