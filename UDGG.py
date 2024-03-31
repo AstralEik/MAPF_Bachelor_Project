@@ -33,9 +33,7 @@ def createGraph():
                     newVertex.neighbours.append(graph[y-1,x])
                 elif((y-1,x) in hasBuilt and mapArray[y-1][x] == '.'):
                     newVertex.neighbours.append(graph[y-1,x])
-                    
-                    
-                    
+                       
                     
             if(x-1 >= 0 and x-1 < width):
                 if (y,x-1) not in hasBuilt and mapArray[y][x-1] == '.':
@@ -45,16 +43,12 @@ def createGraph():
                     newVertex.neighbours.append(graph[y,x-1])
                     
                     
-                    
-                    
             if(y+1 >= 0 and y+1 < height):
                 if (y+1,x) not in hasBuilt and mapArray[y+1][x] == '.':
                     buildGraph(y+1,x)
                     newVertex.neighbours.append(graph[y+1,x])
                 elif((y+1,x) in hasBuilt and mapArray[y+1][x] == '.'):
                     newVertex.neighbours.append(graph[y+1,x])
-                    
-                    
                     
                     
             if(x+1 >= 0 and x+1 < width):   

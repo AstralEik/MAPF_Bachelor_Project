@@ -23,7 +23,6 @@ def STAstar(fromCoords,toCoords,graph):
         return distance
 
     def expandVertex(vertex,costToReach,path):
-        global lowestPathCost 
         closed[vertex] = costToReach
         del open[vertex]
         neighbours = vertex.neighbours
