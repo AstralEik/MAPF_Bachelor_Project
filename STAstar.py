@@ -3,10 +3,10 @@ from math import sqrt
 from UDGG import *
 import heapq
 def STAstar(fromCoords,toCoords,graph):
-    UDG = graph
+    udg = graph
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
-    startVertex = (UDG[fromCoords])
-    targetVertex = (UDG[toCoords])
+    startVertex = (udg[fromCoords])
+    targetVertex = (udg[toCoords])
 
     frontierQueue = []
     open = dict()
@@ -26,23 +26,23 @@ def STAstar(fromCoords,toCoords,graph):
         closed[vertex] = costToReach
         del open[vertex]
         neighbours = vertex.neighbours
-        realPath = copy.copy(path)
-        realPath.append(vertex)
-        for vertexB in neighbours:
-            distanceToGoal = calculateDistance(vertexB) 
+        shallowPath = copy.copy(path)
+        shallowPath.append(vertex)
+        for targetVertex in neighbours:
+            distanceToGoal = calculateDistance(targetVertex) 
             timeCost = costToReach+1
-            if vertexB in open.keys():
-                if open[vertexB] <= timeCost:
+            if targetVertex in open.keys():
+                if open[targetVertex] <= timeCost:
                     continue
-            elif vertexB in closed.keys():
-                if closed[vertexB] <= timeCost:
+            elif targetVertex in closed.keys():
+                if closed[targetVertex] <= timeCost:
                     continue
-                del closed[vertexB]
-                open[vertexB] = timeCost
-                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,vertexB,realPath))
+                del closed[targetVertex]
+                open[targetVertex] = timeCost
+                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
             else:
-                open[vertexB] = timeCost
-                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,vertexB,realPath))
+                open[targetVertex] = timeCost
+                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
 
                 
     def findPathTo(startVertex,targetVertex):
