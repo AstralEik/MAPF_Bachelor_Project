@@ -2,11 +2,10 @@ import copy
 from math import sqrt
 from UDGG import *
 import heapq
-def STAstar(fromCoords,toCoords,graph):
-    udg = graph
+def STAstar(fromCoords,toCoords,graph,reservationTable):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
-    startVertex = (udg[fromCoords])
-    targetVertex = (udg[toCoords])
+    startVertex = (graph[0][fromCoords])
+    targetVertex = (graph[0][toCoords])
 
     frontierQueue = []
     open = dict()
@@ -27,7 +26,7 @@ def STAstar(fromCoords,toCoords,graph):
         del open[vertex]
         neighbours = vertex.neighbours
         shallowPath = copy.copy(path)
-        shallowPath.append(vertex)
+        shallowPath.append((vertex,costToReach))
         for targetVertex in neighbours:
             distanceToGoal = calculateDistance(targetVertex) 
             timeCost = costToReach+1
@@ -39,10 +38,12 @@ def STAstar(fromCoords,toCoords,graph):
                     continue
                 del closed[targetVertex]
                 open[targetVertex] = timeCost
-                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
+                if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
+                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
             else:
                 open[targetVertex] = timeCost
-                heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
+                if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
+                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
 
                 
     def findPathTo(startVertex,targetVertex):
@@ -55,7 +56,7 @@ def STAstar(fromCoords,toCoords,graph):
             if(currentVertex[2] == targetVertex):
                 print("found path!")
                 pathTaken = currentVertex[3]
-                pathTaken.append(currentVertex[2])
+                pathTaken.append((currentVertex[2],currentVertex[1]))
                 return pathTaken
             expandVertex(currentVertex[2],currentVertex[1],currentVertex[3])
     path = findPathTo(startVertex,targetVertex)

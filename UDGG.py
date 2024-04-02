@@ -1,4 +1,4 @@
-from collections import defaultdict
+import copy
 from classdefs import Vertex
 import sys
 def createGraph():
@@ -7,8 +7,6 @@ def createGraph():
     width = int(input().split(" ")[1])
     map = input()
     mapArray = []
-    vertexArray = []
-    edgeDict = {}
     hasBuilt = set()
     
     sys.setrecursionlimit(2000000)
@@ -64,4 +62,10 @@ def createGraph():
         for x in range(width):
             buildGraph(i,x)
 
-    return graph
+    graphWithTime = dict()
+    for i in range(height+width):
+        graphWithTime[i] = graph
+    
+    reservationTable = dict()
+
+    return graphWithTime, reservationTable
