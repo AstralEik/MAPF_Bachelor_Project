@@ -11,7 +11,7 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
     open = dict()
     closed = dict()
 
-    def calculateDistance(vertex):
+    def calculateHeuristicDistance(vertex):
         d1 = sqrt(pow(targetVertex.coord[0]-vertex.coord[0],2))
         d2 = sqrt(pow(targetVertex.coord[1]-vertex.coord[1],2))
         if(d1 < 0):
@@ -24,13 +24,13 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
     def expandVertex(vertex,costToReach,path,waitBool):
         closed[vertex,costToReach] = costToReach
         if(waitBool == False):
-            del open[vertex,costToReach]
+         del open[vertex,costToReach]
         neighbours = vertex.neighbours
         shallowPath = copy.copy(path)
         shallowPath.append((vertex,costToReach))
         wait = False
         for targetVertex in neighbours:
-            distanceToGoal = calculateDistance(targetVertex) 
+            distanceToGoal = calculateHeuristicDistance(targetVertex) 
             timeCost = costToReach+1
             if (targetVertex,timeCost) in open.keys():
                 if open[targetVertex,timeCost] <= timeCost:
@@ -50,15 +50,13 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                     heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
                 elif reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost+1] == False:
                     wait = True
-                    
         if wait == True:
-            open[vertex,costToReach+1] = costToReach+1
+            open[vertex,(costToReach+1)] = costToReach+1
             expandVertex(vertex,costToReach+1,shallowPath,True)
 
-                
     def findPathTo(startVertex,targetVertex):
         #start of program
-        distanceToGoal = calculateDistance(startVertex)
+        distanceToGoal = calculateHeuristicDistance(startVertex)
         open[startVertex, 0] = 0
         heapq.heappush(frontierQueue,(distanceToGoal,0,startVertex,[]))
         while len(frontierQueue) != 0:
