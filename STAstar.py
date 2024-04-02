@@ -5,7 +5,7 @@ import heapq
 def STAstar(fromCoords,toCoords,graph,reservationTable):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
     startVertex = (graph[0][fromCoords])
-    targetVertex = (graph[0][toCoords])
+    targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
 
     frontierQueue = []
     open = dict()
@@ -21,35 +21,45 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
         distance = d1 + d2
         return distance
 
-    def expandVertex(vertex,costToReach,path):
-        closed[vertex] = costToReach
-        del open[vertex]
+    def expandVertex(vertex,costToReach,path,waitBool):
+        closed[vertex,costToReach] = costToReach
+        if(waitBool == False):
+            del open[vertex,costToReach]
         neighbours = vertex.neighbours
         shallowPath = copy.copy(path)
         shallowPath.append((vertex,costToReach))
+        wait = False
         for targetVertex in neighbours:
             distanceToGoal = calculateDistance(targetVertex) 
             timeCost = costToReach+1
-            if targetVertex in open.keys():
-                if open[targetVertex] <= timeCost:
+            if (targetVertex,timeCost) in open.keys():
+                if open[targetVertex,timeCost] <= timeCost:
                     continue
-            elif targetVertex in closed.keys():
-                if closed[targetVertex] <= timeCost:
+            elif (targetVertex,timeCost) in closed.keys():
+                if closed[targetVertex,timeCost] <= timeCost:
                     continue
-                del closed[targetVertex]
-                open[targetVertex] = timeCost
+                del closed[targetVertex,timeCost]
+                open[targetVertex,timeCost] = timeCost
                 if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
                     heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
+                elif reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost+1] == False:
+                    wait = True
             else:
-                open[targetVertex] = timeCost
+                open[targetVertex,timeCost] = timeCost
                 if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
                     heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
+                elif reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost+1] == False:
+                    wait = True
+                    
+        if wait == True:
+            open[vertex,costToReach+1] = costToReach+1
+            expandVertex(vertex,costToReach+1,path,True)
 
                 
     def findPathTo(startVertex,targetVertex):
         #start of program
         distanceToGoal = calculateDistance(startVertex)
-        open[startVertex] = 0
+        open[startVertex, 0] = 0
         heapq.heappush(frontierQueue,(distanceToGoal,0,startVertex,[]))
         while len(frontierQueue) != 0:
             currentVertex = heapq.heappop(frontierQueue)
@@ -58,6 +68,6 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                 pathTaken = currentVertex[3]
                 pathTaken.append((currentVertex[2],currentVertex[1]))
                 return pathTaken
-            expandVertex(currentVertex[2],currentVertex[1],currentVertex[3])
+            expandVertex(currentVertex[2],currentVertex[1],currentVertex[3],False)
     path = findPathTo(startVertex,targetVertex)
     return path
