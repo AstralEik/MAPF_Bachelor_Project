@@ -53,7 +53,7 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                     
         if wait == True:
             open[vertex,costToReach+1] = costToReach+1
-            expandVertex(vertex,costToReach+1,path,True)
+            expandVertex(vertex,costToReach+1,shallowPath,True)
 
                 
     def findPathTo(startVertex,targetVertex):
