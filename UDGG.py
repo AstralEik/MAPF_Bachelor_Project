@@ -67,4 +67,4 @@ def createGraph():
         for h in range(height):
             for w in range(width):
                 reservationTable[h,w,t] = False
-    return graphWithTime, reservationTable
+    return graphWithTime, reservationTable, probableMaxTime*probableMaxTime
