@@ -6,12 +6,11 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
     startVertex = (graph[0][fromCoords])
     targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
-
-    frontierQueue = []
-    open = dict()
-    closed = dict()
-
-    def calculateHeuristicDistance(vertex):
+    heuristicDict = dict()
+    
+    heuristicDict[targetVertex] = 0
+    
+    def calculateStraightLineDistance(vertex):
         d1 = sqrt(pow(targetVertex.coord[0]-vertex.coord[0],2))
         d2 = sqrt(pow(targetVertex.coord[1]-vertex.coord[1],2))
         if(d1 < 0):
@@ -21,52 +20,109 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
         distance = d1 + d2
         return distance
 
-    def expandVertex(vertex,costToReach,path,waitBool):
-        closed[vertex,costToReach] = costToReach
-        del open[vertex,costToReach]
+    def calculateHeuristicDistance(vertex):
+        if vertex not in heuristicDict.keys():
+            path = findPathTo(targetVertex, vertex, True)
+            for pathVertex in path:
+                heuristicDict[pathVertex[0]] = pathVertex[1]
+                #print(pathVertex[0].coord, pathVertex[1])
+            heuristicDict[vertex] = len(path)
+            return heuristicDict[vertex]
+        else:
+            return heuristicDict[vertex]
+
+    def expandVertex(vertex,costToReach,path, open, closed, frontierQueue, heuristicBool):
+        if(heuristicBool == False):
+            closed[vertex,costToReach] = costToReach
+            del open[vertex,costToReach]
+        else:
+            closed[vertex] = costToReach
+            del open[vertex]
         neighbours = vertex.neighbours
         shallowPath = copy.copy(path)
         shallowPath.append((vertex,costToReach))
         spawnWaitTimeline = False
-        for targetVertex in neighbours:
-            distanceToGoal = calculateHeuristicDistance(targetVertex) 
-            timeCost = costToReach+1
-            if (targetVertex,timeCost) in open.keys():
-                if open[targetVertex,timeCost] <= timeCost:
-                    continue
-            elif (targetVertex,timeCost) in closed.keys():
-                if closed[targetVertex,timeCost] <= timeCost:
-                    continue
-                del closed[targetVertex,timeCost]
-                open[targetVertex,timeCost] = timeCost
-                if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
-                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
-                elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
-                    spawnWaitTimeline = True
+        for targetingVertex in neighbours:
+            
+            if(heuristicBool == True):
+                distanceToGoal = calculateStraightLineDistance(targetingVertex) 
             else:
-                open[targetVertex,timeCost] = timeCost
-                if reservationTable[targetVertex.coord[0],targetVertex.coord[1],timeCost] == False:
-                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetVertex,shallowPath))
-                elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
-                    spawnWaitTimeline = True
+                distanceToGoal = calculateHeuristicDistance(targetingVertex) 
+            
+            timeCost = costToReach+1
+            
+            if(heuristicBool == False):
+                if (targetingVertex,timeCost) in open.keys():
+                    if open[targetingVertex,timeCost] <= timeCost:
+                        continue
+                elif (targetingVertex,timeCost) in closed.keys():
+                    if closed[targetingVertex,timeCost] <= timeCost:
+                        continue
+                    del closed[targetingVertex,timeCost]
+                    open[targetingVertex,timeCost] = timeCost
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                        heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
+                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                        spawnWaitTimeline = True
+                else:
+                    open[targetingVertex,timeCost] = timeCost
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                        heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
+                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                        spawnWaitTimeline = True
+            else:
+                if (targetingVertex) in open.keys():
+                    if open[targetingVertex] <= timeCost:
+                        continue
+                elif (targetingVertex) in closed.keys():
+                    if closed[targetingVertex] <= timeCost:
+                        continue
+                    del closed[targetingVertex]
+                    open[targetingVertex] = timeCost
+                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
+                else:
+                    open[targetingVertex] = timeCost
+                    heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
+            
+                    
+                    
         if spawnWaitTimeline == True:
             timeCost = costToReach+1
-            open[vertex,(timeCost)] = timeCost
-            distanceToGoal = calculateHeuristicDistance(vertex) 
+            open[vertex,(timeCost)] = timeCost 
+            if(heuristicBool == True):
+                distanceToGoal = calculateStraightLineDistance(vertex) 
+            else:
+                distanceToGoal = calculateHeuristicDistance(vertex) 
             heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,vertex,shallowPath))
+            
+            
+        
 
-    def findPathTo(startVertex,targetVertex):
+    def findPathTo(startVertex,targetVertex, heuristicBool):
+        #print(startVertex.coord, targetVertex.coord, heuristicBool)
         #start of program
+        frontierQueue = []
+        open = dict()
+        closed = dict()
         distanceToGoal = calculateHeuristicDistance(startVertex)
-        open[startVertex, 0] = 0
+        if(heuristicBool == False):
+            open[startVertex, 0] = 0
+        else:
+            open[startVertex] = 0
         heapq.heappush(frontierQueue,(distanceToGoal,0,startVertex,[]))
         while len(frontierQueue) != 0:
             currentVertex = heapq.heappop(frontierQueue)
             if(currentVertex[2] == targetVertex):
-                print("found path!")
+                #print("found path!")
                 pathTaken = currentVertex[3]
                 pathTaken.append((currentVertex[2],currentVertex[1]))
                 return pathTaken
-            expandVertex(currentVertex[2],currentVertex[1],currentVertex[3],False)
-    path = findPathTo(startVertex,targetVertex)
+            if heuristicBool == True:
+                expandVertex(currentVertex[2],currentVertex[1],currentVertex[3], open, closed, frontierQueue, True)
+            else:
+                expandVertex(currentVertex[2],currentVertex[1],currentVertex[3], open, closed, frontierQueue, False)
+                  
+    path = findPathTo(startVertex,targetVertex, False)
     return path
+
+
