@@ -5,6 +5,7 @@ import heapq
 def STAstar(fromCoords,toCoords,graph,reservationTable):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
     startVertex = (graph[0][fromCoords])
+    #print(graph.keys())
     targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
     heuristicDict = dict()
     
