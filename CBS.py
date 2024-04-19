@@ -7,9 +7,9 @@ open = []
 closed = []
 listOfCbsStates = []
 
-#agents = ([1,0,2,3],[0,1,3,2])
+agents = ([1,0,2,3],[0,1,3,2])
 #agents = ([0,1,2,3],[1,0,3,2])
-agents = ([1,1,1,4],[1,3,1,0])
+# agents = ([1,1,1,4],[1,3,1,0])
 class CBSNode:
     def __init__(self, paths, cost, parent) -> None:
         self.paths = paths
