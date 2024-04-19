@@ -34,17 +34,21 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
 
     def expandVertex(vertex,costToReach,path, open, closed, frontierQueue, heuristicBool):
         if(heuristicBool == False):
+            #print(vertex.coord, costToReach)
             closed[vertex,costToReach] = costToReach
             del open[vertex,costToReach]
         else:
             closed[vertex] = costToReach
             del open[vertex]
+        
         neighbours = vertex.neighbours
         shallowPath = copy.copy(path)
         shallowPath.append((vertex,costToReach))
         spawnWaitTimeline = False
         for targetingVertex in neighbours:
-            
+            #if heuristicBool == False:
+                #print("-----", targetingVertex.coord, costToReach+1)
+                #print(reservationTable[1,1,2])
             if(heuristicBool == True):
                 distanceToGoal = calculateStraightLineDistance(targetingVertex) 
             else:
@@ -60,16 +64,19 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                     if closed[targetingVertex,timeCost] <= timeCost:
                         continue
                     del closed[targetingVertex,timeCost]
-                    open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                        #print("----------------", targetingVertex.coord, costToReach+1)
+                        open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    if reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
                         spawnWaitTimeline = True
                 else:
-                    open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                    
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                        #print("----------------", targetingVertex.coord, costToReach+1)
+                        open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    if reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
                         spawnWaitTimeline = True
             else:
                 if (targetingVertex) in open.keys():
@@ -87,9 +94,9 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
             
                     
                     
-        if spawnWaitTimeline == True:
+        if spawnWaitTimeline == True and (vertex,costToReach+1) not in open.keys():
             timeCost = costToReach+1
-            open[vertex,(timeCost)] = timeCost 
+            open[vertex,timeCost] = timeCost 
             if(heuristicBool == True):
                 distanceToGoal = calculateStraightLineDistance(vertex) 
             else:
@@ -117,12 +124,14 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                 #print("found path!")
                 pathTaken = currentVertex[3]
                 pathTaken.append((currentVertex[2],currentVertex[1]))
+                #if heuristicBool == False:
+                    #print((currentVertex[2].coord,currentVertex[1]))
                 return pathTaken
             if heuristicBool == True:
                 expandVertex(currentVertex[2],currentVertex[1],currentVertex[3], open, closed, frontierQueue, True)
             else:
                 expandVertex(currentVertex[2],currentVertex[1],currentVertex[3], open, closed, frontierQueue, False)
-                  
+    #print(" ")
     path = findPathTo(startVertex,targetVertex, False)
     if(path != None):
         return path
