@@ -19,7 +19,7 @@ def createGraph():
         mapArray.append(line)
     
     def buildGraph(y,x):
-        if((y,x) not in hasBuilt):
+        if((y,x) not in hasBuilt and mapArray[y][x] == '.'):
             hasBuilt.add((y,x))
             newVertex = Vertex()
             newVertex.coord[0] = y

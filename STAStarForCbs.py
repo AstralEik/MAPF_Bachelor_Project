@@ -22,11 +22,14 @@ def STAstar(fromCoords,toCoords,graph,constraints):
         return distance
 
     def calculateHeuristicDistance(vertex):
+        #print(vertex)
         if vertex not in heuristicDict.keys():
             path = findPathTo(targetVertex, vertex, True)
+            #print(targetVertex.coord, vertex.coord)
             for pathVertex in path:
                 heuristicDict[pathVertex[0]] = pathVertex[1]
                 #print(pathVertex[0].coord, pathVertex[1])
+            
             heuristicDict[vertex] = len(path)
             return heuristicDict[vertex]
         else:
@@ -68,14 +71,14 @@ def STAstar(fromCoords,toCoords,graph,constraints):
                         #print("----------------", targetingVertex.coord, costToReach+1)
                         open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    if (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
+                    elif (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
                         spawnWaitTimeline = True
                 else:
                     if (targetingVertex.coord[0],targetingVertex.coord[1],timeCost) not in constraints:
                         #print("----------------", targetingVertex.coord, costToReach+1)
                         open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    if (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
+                    elif (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
                         spawnWaitTimeline = True
             else:
                 if (targetingVertex) in open.keys():
@@ -130,6 +133,7 @@ def STAstar(fromCoords,toCoords,graph,constraints):
     #print(" ")
     path = findPathTo(startVertex,targetVertex, False)
     if(path != None):
+        #print(path)
         return path
     else:
         return []

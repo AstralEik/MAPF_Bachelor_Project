@@ -61,13 +61,13 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                         continue
                     del closed[targetingVertex,timeCost]
                     open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
                     elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
                         spawnWaitTimeline = True
                 else:
                     open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False and reservationTable[vertex.coord[0],vertex.coord[1],timeCost+1] == False:
+                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
                     elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
                         spawnWaitTimeline = True
