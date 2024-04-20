@@ -51,7 +51,7 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
                 
                 current = node.paths[x]
                 if i < len(current):
-                    print(current[i])
+                    #print(current[i])
                     if (current[i][0].coord[0], current[i][0].coord[1], x) in targetVertexes:
                         reachedTargetStates[(current[i][0].coord[0], current[i][0].coord[1])] = x
                     
@@ -74,9 +74,9 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
                         else:
                         #print(" ")
                             a1 = vertexConflictDict[current[i]]
-                            print(a1)
+                            #print(a1)
                             a2 = x
-                            print(a2)
+                            #print(a2)
                             
                             placeAndTime = current[i]
                         
@@ -132,17 +132,17 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
         currentNode = open.pop()
         listOfCbsStates.append(evalCBSNode(currentNode))
 
-    print("hullo")
-    somethinglist = []
-    somethinglist.append(topOfCBSTree)
-    while len(somethinglist) != 0:
-        print(" ")
-        currentsomething = somethinglist.pop()
-        for i in currentsomething.constraints:
-            print((i[0], i[1][0], i[1][1], i[2]))
-        if(len(currentsomething.children) != 0):
-            somethinglist.append(currentsomething.children[0])
-            somethinglist.append(currentsomething.children[1])
+    #print("hullo")
+    #somethinglist = []
+    #somethinglist.append(topOfCBSTree)
+    #while len(somethinglist) != 0:
+    #    print(" ")
+    #    currentsomething = somethinglist.pop()
+    #    for i in currentsomething.constraints:
+    #        print((i[0], i[1][0], i[1][1], i[2]))
+    #    if(len(currentsomething.children) != 0):
+    #        somethinglist.append(currentsomething.children[0])
+    #        somethinglist.append(currentsomething.children[1])
 
 
 
