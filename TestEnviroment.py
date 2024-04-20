@@ -8,23 +8,26 @@ graph, reservationTable, probableMaxTime, height, width = createGraph()
 
 agents = []
 
-for i in range(height):
-    y1 = random.randint(0,height-1)
-    x1 = random.randint(0,width-1)
-    
-    y2 = random.randint(0,height-1)
-    x2 = random.randint(0,width-1)
-    
-    if (y1, x1) != (y2, x2):
-        pathExists = Astar((y1, x1),(y2, x2),graph)
-    if pathExists != None:
-        agents.append([y1,x1,y2,x2])
+#for i in range(height):
+#    pathExists = None
+#    y1 = random.randint(0,height-1)
+#    x1 = random.randint(0,width-1)
+#    
+#    y2 = random.randint(0,height-1)
+#    x2 = random.randint(0,width-1)
+#    
+#    if (y1, x1) != (y2, x2):
+#        pathExists = Astar((y1, x1),(y2, x2),graph)
+#    if pathExists != None:
+#        agents.append([y1,x1,y2,x2])
 
-print(agents)
+#print(agents)
+
 
 
 #agents = ([1,0,2,3],[0,1,3,2])
-
+#agents = ([1,1,1,4],[1,3,1,0])
+agents = [[1, 2, 1, 1], [2, 3, 3, 2], [2, 1, 0, 1]]
 #test = Astar((1,0),(2,3),graph)
 #for i in test:
 #    print(i[0].coord, i[1])
@@ -42,10 +45,11 @@ for i in cbsStates:
             lowestCostCbsNode = i
     elif(lowestCostCbsNode != None and i.cost < lowestCostCbsNode.cost and i.isGoalNode == True):
             lowestCostCbsNode = i
-for x in lowestCostCbsNode.paths:
-    print(" ")
-    for y in x:
-        print(y[0].coord[0], y[0].coord[1], y[1])
+if lowestCostCbsNode != None:
+    for x in lowestCostCbsNode.paths:
+        print(" ")
+        for y in x:
+            print(y[0].coord[0], y[0].coord[1], y[1])
 
 print("------HCAstar PATH------")
 

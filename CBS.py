@@ -6,6 +6,11 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
     open = []
     closed = []
     listOfCbsStates = []
+    targetVertexes = set()
+    
+    for i in range(len(agents)):
+        #print(agents[i][2],agents[i][3], i)
+        targetVertexes.add((agents[i][2],agents[i][3], i))
 
     #agents = ([1,0,2,3],[0,1,3,2])
     #agents = ([0,1,2,3],[1,0,3,2])
@@ -39,43 +44,59 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
         
         ## Check for vertex conflicts
         vertexConflictDict = dict()
+        reachedTargetStates = dict()
         for i in range(longestPath):
         
             for x in range(len(node.paths)):
                 
                 current = node.paths[x]
                 if i < len(current):
+                    print(current[i])
+                    if (current[i][0].coord[0], current[i][0].coord[1], x) in targetVertexes:
+                        reachedTargetStates[(current[i][0].coord[0], current[i][0].coord[1])] = x
+                    
                     if current[i] not in vertexConflictDict.keys():
                         vertexConflictDict[current[i]] = x   
-                    else:
+                    if current[i] in vertexConflictDict.keys() and vertexConflictDict[current[i]] != x or ((current[i][0].coord[0], current[i][0].coord[1]) in reachedTargetStates.keys() and x != reachedTargetStates[current[i][0].coord[0], current[i][0].coord[1]]):
                         node.isGoalNode = False
                         
-                        
+                        if((current[i][0].coord[0], current[i][0].coord[1]) in reachedTargetStates.keys() and x != reachedTargetStates[current[i][0].coord[0], current[i][0].coord[1]]):
+                            agent = x
+                            placeAndTime = current[i]
+                            Child = CBSNode(copy.copy(node.paths),0,node)
+                            Child = CBSNode(copy.copy(node.paths),0,node)
+                            Child.constraints = copy.copy(node.constraints)
+                            Child.constraints.append((agent, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
+                            Child.agentToRecheck = agent
+                            
+                            open.append(Child)
+                            return node
+                        else:
                         #print(" ")
-                        a1 = vertexConflictDict[current[i]]
-                        #print(a1)
-                        a2 = x
-                        #print(a2)
+                            a1 = vertexConflictDict[current[i]]
+                            print(a1)
+                            a2 = x
+                            print(a2)
+                            
+                            placeAndTime = current[i]
                         
-                        placeAndTime = current[i]
-                    
-                        leftChild = CBSNode(copy.copy(node.paths),0,node)
-                        rightChild = CBSNode(copy.copy(node.paths),0,node)
-                        leftChild.constraints = copy.copy(node.constraints)
-                        leftChild.constraints.append((a1, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
-                        leftChild.agentToRecheck = a1
-                        
-                        rightChild.constraints = copy.copy(node.constraints)
-                        rightChild.constraints.append((a2, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
-                        rightChild.agentToRecheck = a2
-                        
-                        node.children.append(leftChild)
-                        node.children.append(rightChild)
-                        
-                        open.append(leftChild)
-                        open.append(rightChild)
-                        
-                        return node
+                            leftChild = CBSNode(copy.copy(node.paths),0,node)
+                            rightChild = CBSNode(copy.copy(node.paths),0,node)
+                            leftChild.constraints = copy.copy(node.constraints)
+                            leftChild.constraints.append((a1, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
+                            leftChild.agentToRecheck = a1
+                            
+                            rightChild.constraints = copy.copy(node.constraints)
+                            rightChild.constraints.append((a2, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
+                            rightChild.agentToRecheck = a2
+                            
+                            node.children.append(leftChild)
+                            node.children.append(rightChild)
+                            
+                            open.append(leftChild)
+                            open.append(rightChild)
+                            
+                            return node
                     
                     
                             
@@ -111,6 +132,20 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
         currentNode = open.pop()
         listOfCbsStates.append(evalCBSNode(currentNode))
 
+    print("hullo")
+    somethinglist = []
+    somethinglist.append(topOfCBSTree)
+    while len(somethinglist) != 0:
+        print(" ")
+        currentsomething = somethinglist.pop()
+        for i in currentsomething.constraints:
+            print((i[0], i[1][0], i[1][1], i[2]))
+        if(len(currentsomething.children) != 0):
+            somethinglist.append(currentsomething.children[0])
+            somethinglist.append(currentsomething.children[1])
+
+
+
     return listOfCbsStates
     #lowestCostCbsNode = None
     #for i in listOfCbsStates:
@@ -123,13 +158,4 @@ def CBS(agents, graph, reservationTable, probableMaxTime):
     #    for y in x:
     #        print(y[0].coord[0], y[0].coord[1], y[1])
 
-    #somethinglist = []
-    #somethinglist.append(topOfCBSTree)
-    #while len(somethinglist) != 0:
-    #    print(" ")
-    #    currentsomething = somethinglist.pop()
-    #    for i in currentsomething.constraints:
-    #        print((i[0], i[1][0], i[1][1], i[2]))
-    #    if(len(currentsomething.children) != 0):
-    #        somethinglist.append(currentsomething.children[0])
-    #        somethinglist.append(currentsomething.children[1])
+

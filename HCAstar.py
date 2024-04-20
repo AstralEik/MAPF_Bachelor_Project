@@ -17,6 +17,7 @@ def HCAstar(agents, graph, reservationTable, probableMaxTime):
             #print(m[0].coord[0],m[0].coord[1],m[1])
             reservationTable[m[0].coord[0],m[0].coord[1],m[1]] = True
         target = path.pop()
+        path.append(target)
         for n in range(target[1], probableMaxTime):
             reservationTable[target[0].coord[0],target[0].coord[1],n] = True
     return pathList
