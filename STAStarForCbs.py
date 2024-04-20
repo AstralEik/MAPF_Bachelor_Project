@@ -2,7 +2,7 @@ import copy
 from math import sqrt
 from UDGG import *
 import heapq
-def STAstar(fromCoords,toCoords,graph,reservationTable):
+def STAstar(fromCoords,toCoords,graph,constraints):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
     startVertex = (graph[0][fromCoords])
     #print(graph.keys())
@@ -64,19 +64,18 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                     if closed[targetingVertex,timeCost] <= timeCost:
                         continue
                     del closed[targetingVertex,timeCost]
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                    if (targetingVertex.coord[0],targetingVertex.coord[1],timeCost) not in constraints:
                         #print("----------------", targetingVertex.coord, costToReach+1)
                         open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    if reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    if (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
                         spawnWaitTimeline = True
                 else:
-                    
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                    if (targetingVertex.coord[0],targetingVertex.coord[1],timeCost) not in constraints:
                         #print("----------------", targetingVertex.coord, costToReach+1)
                         open[targetingVertex,timeCost] = timeCost
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    if reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    if (vertex.coord[0],vertex.coord[1],timeCost) not in constraints:
                         spawnWaitTimeline = True
             else:
                 if (targetingVertex) in open.keys():
@@ -94,13 +93,10 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
             
                     
                     
-        if spawnWaitTimeline == True and (vertex,costToReach+1) not in open.keys():
+        if spawnWaitTimeline == True and (vertex,costToReach+1) not in open.keys() and heuristicBool == False:
             timeCost = costToReach+1
             open[vertex,timeCost] = timeCost 
-            if(heuristicBool == True):
-                distanceToGoal = calculateStraightLineDistance(vertex) 
-            else:
-                distanceToGoal = calculateHeuristicDistance(vertex) 
+            distanceToGoal = calculateHeuristicDistance(vertex) 
             heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,vertex,shallowPath))
             
             
