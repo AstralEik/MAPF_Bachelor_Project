@@ -31,7 +31,7 @@ print(agents)
 
 #agents = ([1,0,2,3],[0,1,3,2])
 #agents = ([1,1,1,4],[1,3,1,0])
-#agents = [[1, 2, 1, 1], [2, 3, 3, 2], [2, 1, 0, 1]]
+agents = [[1, 2, 1, 1], [2, 3, 3, 2], [2, 1, 0, 1]]
 #test = Astar((1,0),(2,3),graph)
 #for i in test:
 #    print(i[0].coord, i[1])
