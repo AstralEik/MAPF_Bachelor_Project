@@ -4,13 +4,13 @@ from UDGG import *
 import heapq
 def Astar(fromCoords,toCoords,graph):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
-    if fromCoords in graph[0].keys():
-        startVertex = (graph[0][fromCoords])
+    if fromCoords in graph.keys():
+        startVertex = (graph[fromCoords])
     else:
         return None
     #print(graph.keys())
-    if toCoords in graph[0].keys():
-        targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
+    if toCoords in graph.keys():
+        targetVertex = (graph[toCoords]) #time does not really matter here since this returns a vertex object
     else:
         return None
     heuristicDict = dict()

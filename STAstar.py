@@ -2,11 +2,11 @@ import copy
 from math import sqrt
 from UDGG import *
 import heapq
-def STAstar(fromCoords,toCoords,graph,reservationTable):
+def STAstar(fromCoords,toCoords,graph,reservationSet):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
-    startVertex = (graph[0][fromCoords])
+    startVertex = (graph[fromCoords])
     #print(graph.keys())
-    targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
+    targetVertex = (graph[toCoords]) #time does not really matter here since this returns a vertex object
     heuristicDict = dict()
     
     heuristicDict[targetVertex] = 0
@@ -61,15 +61,15 @@ def STAstar(fromCoords,toCoords,graph,reservationTable):
                         continue
                     del closed[targetingVertex,timeCost]
                     open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                    if (targetingVertex.coord[0],targetingVertex.coord[1],timeCost) not in reservationSet:
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    elif (vertex.coord[0],vertex.coord[1],timeCost) not in reservationSet:
                         spawnWaitTimeline = True
                 else:
                     open[targetingVertex,timeCost] = timeCost
-                    if reservationTable[targetingVertex.coord[0],targetingVertex.coord[1],timeCost] == False:
+                    if (targetingVertex.coord[0],targetingVertex.coord[1],timeCost) not in reservationSet:
                         heapq.heappush(frontierQueue,((distanceToGoal+timeCost),timeCost,targetingVertex,shallowPath))
-                    elif reservationTable[vertex.coord[0],vertex.coord[1],timeCost] == False:
+                    elif (vertex.coord[0],vertex.coord[1],timeCost) not in reservationSet:
                         spawnWaitTimeline = True
             else:
                 if (targetingVertex) in open.keys():

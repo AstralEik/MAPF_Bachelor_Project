@@ -4,9 +4,9 @@ from UDGG import *
 import heapq
 def STAstar(fromCoords,toCoords,graph,constraints):
     #https://mat.uab.cat/~alseda/MasterOpt/AStar-Algorithm.pdf
-    startVertex = (graph[0][fromCoords])
+    startVertex = (graph[fromCoords])
     #print(graph.keys())
-    targetVertex = (graph[0][toCoords]) #time does not really matter here since this returns a vertex object
+    targetVertex = (graph[toCoords]) #time does not really matter here since this returns a vertex object
     heuristicDict = dict()
     
     heuristicDict[targetVertex] = 0

@@ -1,6 +1,6 @@
 from UDGG import *
 from STAStarForCbs import *
-def CBS(agents, graph, reservationTable, probableMaxTime):
+def CBS(agents, graph, probableMaxTime):
     #graph, reservationTable, probableMaxTime = createGraph()
 
     open = []

@@ -5,7 +5,7 @@ from AStar import *
 from STAStarForCbs import *
 import random
 
-graph, reservationTable, probableMaxTime, height, width = createGraph()
+graph, probableMaxTime, height, width = createGraph()
 
 agents = []
 
@@ -39,7 +39,7 @@ agents = [[1, 2, 1, 1], [2, 3, 3, 2], [2, 1, 0, 1]]
 # generate random list of agents in format [y1,x1,y2,x2]
 #testingCoords = ([1,0,2,3],[0,1,3,2])
 
-cbsStates = CBS(agents,graph,reservationTable,probableMaxTime)
+cbsStates = CBS(agents,graph,probableMaxTime)
 
 #print cbs path
 print("--------CBS PATH------")
@@ -57,7 +57,7 @@ if lowestCostCbsNode != None:
 
 print("------HCAstar PATH------")
 
-hcaStarPath = HCAstar(agents, graph, reservationTable, probableMaxTime) 
+hcaStarPath = HCAstar(agents, graph, probableMaxTime) 
 
 # print hcastar path
 for x in hcaStarPath:

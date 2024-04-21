@@ -58,13 +58,13 @@ def createGraph():
         for x in range(width):
             buildGraph(i,x)
 
-    graphWithTime = dict()
-    for i in range(probableMaxTime):
-        graphWithTime[i] = graph
+    #graphWithTime = dict()
+    #for i in range(probableMaxTime):
+    #    graphWithTime[i] = graph
     
-    reservationTable = dict()
-    for t in range(probableMaxTime*probableMaxTime):
-        for h in range(height):
-            for w in range(width):
-                reservationTable[h,w,t] = False
-    return graphWithTime, reservationTable, probableMaxTime*probableMaxTime, height, width
+    #reservationTable = dict()
+    #for t in range(probableMaxTime*probableMaxTime):
+    #    for h in range(height):
+    #        for w in range(width):
+    #            reservationTable[h,w,t] = False
+    return graph, probableMaxTime*probableMaxTime, height, width
