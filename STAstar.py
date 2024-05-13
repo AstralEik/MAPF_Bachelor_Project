@@ -35,7 +35,8 @@ def STAstar(fromCoords,toCoords,graph,reservationSet):
     def expandVertex(vertex,costToReach,path, open, closed, frontierQueue, heuristicBool):
         if(heuristicBool == False):
             closed[vertex,costToReach] = costToReach
-            del open[vertex,costToReach]
+            if((vertex, costToReach) in open.keys()):
+                del open[vertex,costToReach]
         else:
             closed[vertex] = costToReach
             del open[vertex]

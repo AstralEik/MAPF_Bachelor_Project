@@ -1,5 +1,5 @@
+from STAstar import *
 from UDGG import *
-from STAStarForCbs import *
 def CBS(agents, graph, probableMaxTime):
     #graph, reservationTable, probableMaxTime = createGraph()
 
@@ -45,6 +45,7 @@ def CBS(agents, graph, probableMaxTime):
         ## Check for vertex conflicts
         vertexConflictDict = dict()
         reachedTargetStates = dict()
+        nastyBoll = False
         for i in range(longestPath):
         
             for x in range(len(node.paths)):
@@ -62,15 +63,21 @@ def CBS(agents, graph, probableMaxTime):
                         
                         if((current[i][0].coord[0], current[i][0].coord[1]) in reachedTargetStates.keys() and x != reachedTargetStates[current[i][0].coord[0], current[i][0].coord[1]]):
                             agent = x
+                            print("coords",x,current[i][0].coord[0], current[i][0].coord[1])
+                            print((current[i][0].coord[0], current[i][0].coord[1]), reachedTargetStates[current[i][0].coord[0], current[i][0].coord[1]])
                             placeAndTime = current[i]
-                            Child = CBSNode(copy.copy(node.paths),0,node)
+                            nastyBoll = True
                             Child = CBSNode(copy.copy(node.paths),0,node)
                             Child.constraints = copy.copy(node.constraints)
-                            Child.constraints.append((agent, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
-                            Child.agentToRecheck = agent
-                            
-                            open.append(Child)
-                            return node
+                            if((agent, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]) not in Child.constraints):
+                                Child.constraints.append((agent, placeAndTime[0].coord[0], placeAndTime[0].coord[1], placeAndTime[1]))
+                                print(placeAndTime[0].coord[0], placeAndTime[0].coord[1])
+                                print((Child.constraints))
+                                Child.agentToRecheck = agent
+                                print(" ")
+                                print(" ")
+                                open.append(Child)
+                                return node     
                         else:
                         #print(" ")
                             a1 = vertexConflictDict[current[i]]
@@ -99,8 +106,8 @@ def CBS(agents, graph, probableMaxTime):
                             return node
                     
                     
-                            
-        return node
+        if nastyBoll == False:           
+            return node
                     
 
     def lowLevelSearch(agentStart, agentTarget, graph, constraints, agentId):
@@ -108,7 +115,6 @@ def CBS(agents, graph, probableMaxTime):
         constraintsForAgent = set()
         for i in constraints:
             if i[0] == agentId:
-                
                 #print(i)
                 constraintsForAgent.add((i[1], i[2], i[3]))
                 
